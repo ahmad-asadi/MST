@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{prepare\PYGZus{}data\PYGZus{}and\PYGZus{}train\PYGZus{}structure}\PYG{p}{(}\PYG{n}{batchData}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{batchImgFileName}\PYG{p}{,} \PYG{n}{cnn}\PYG{p}{,}
+            \PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{imageFeaturesSize}\PYG{p}{,} \PYG{n}{rnn}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{batchLabelRaw}\PYG{p}{):}
+  \PYG{k}{global} \PYG{n}{costs}
+  \PYG{n}{batchInput} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{n}{batchLabel} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}
+  \PYG{p}{,} \PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{n}{batchImageFeatures} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{k}{for} \PYG{n}{batchCnt} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{batchImgFileName}\PYG{p}{)):}
+  \PYG{n}{imageFeatures} \PYG{o}{=} \PYG{n}{cnn}\PYG{o}{.}\PYG{n}{extract\PYGZus{}features}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}
+  \PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}train2014/\PYGZdq{}} \PYG{o}{+} \PYG{n}{batchImgFileName}\PYG{p}{[}\PYG{n}{batchCnt}\PYG{p}{]))}
+  \PYG{n}{imageFeatures} \PYG{o}{=} \PYG{n}{imageFeatures}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+  \PYG{n}{batchInput}\PYG{p}{[:,} \PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{batchData}\PYG{p}{[:,} \PYG{p}{:,} \PYG{n}{batchCnt}\PYG{p}{]}
+  \PYG{n}{batchImageFeatures}\PYG{p}{[}\PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{imageFeatures}
+  \PYG{n}{batchLabel}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{batchLabel}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=}
+  \PYG{p}{[}\PYG{n}{batchLabelRaw}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{p}{:,} \PYG{n}{batchCnt}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in}
+  \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)]}
+
+  \PYG{n}{costs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{rnn}\PYG{o}{.}\PYG{n}{train\PYGZus{}batch}\PYG{p}{(}\PYG{n}{Xbatch}\PYG{o}{=}\PYG{n}{batchInput}\PYG{p}{,}
+   \PYG{n}{annotationsBatch}\PYG{o}{=}\PYG{n}{batchImageFeatures}\PYG{p}{,} \PYG{n}{Ybatch}\PYG{o}{=}\PYG{n}{batchLabel}\PYG{p}{,} \PYG{n}{keep\PYGZus{}prob}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{)}
+\end{Verbatim}

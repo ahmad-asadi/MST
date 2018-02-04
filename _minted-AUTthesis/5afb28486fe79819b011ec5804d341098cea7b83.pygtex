@@ -1,0 +1,147 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{tensorflow} \PYG{k+kn}{as} \PYG{n+nn}{tf}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+
+\PYG{k+kn}{from} \PYG{n+nn}{tensorflow.contrib.seq2seq} \PYG{k+kn}{import} \PYG{n}{BahdanauAttention}
+\PYG{k+kn}{from} \PYG{n+nn}{main.neuralNetworks.rnn.GuidedAttentionRNNCell} \PYG{k+kn}{import} \PYG{n}{GuidedAttentionCell}
+
+
+\PYG{k}{class} \PYG{n+nc}{StackedRNN}\PYG{p}{:}
+  \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{input\PYGZus{}size}\PYG{p}{,} \PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{,} \PYG{n}{lstm\PYGZus{}size}\PYG{p}{,} \PYG{n}{number\PYGZus{}of\PYGZus{}layers}\PYG{p}{,}
+              \PYG{n}{output\PYGZus{}size}\PYG{p}{,} \PYG{n}{session}\PYG{p}{,} \PYG{n}{learning\PYGZus{}rate}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{p}{,} \PYG{n}{attn\PYGZus{}length}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,}
+              \PYG{n}{attn\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{attn\PYGZus{}mechanism}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}bahdanau\PYGZdq{}}\PYG{p}{,} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}rnn\PYGZdq{}}\PYG{p}{,} \PYG{n}{cnn\PYGZus{}graph}\PYG{o}{=}\PYG{n+nb+bp}{None}\PYG{p}{):}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{scope} \PYG{o}{=} \PYG{n}{name}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cnn\PYGZus{}graph} \PYG{o}{=} \PYG{n}{cnn\PYGZus{}graph}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}length} \PYG{o}{=} \PYG{n}{attn\PYGZus{}length}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}size} \PYG{o}{=} \PYG{n}{attn\PYGZus{}size}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}mechanism} \PYG{o}{=} \PYG{n}{attn\PYGZus{}mechanism}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{input\PYGZus{}size} \PYG{o}{=} \PYG{n}{input\PYGZus{}size}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size} \PYG{o}{=} \PYG{n}{image\PYGZus{}feature\PYGZus{}size}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{batch\PYGZus{}size} \PYG{o}{=} \PYG{n}{batch\PYGZus{}size}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}input size:\PYGZdq{}}\PYG{p}{,} \PYG{n}{input\PYGZus{}size}\PYG{p}{)}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size} \PYG{o}{=} \PYG{n}{lstm\PYGZus{}size}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{number\PYGZus{}of\PYGZus{}layers} \PYG{o}{=} \PYG{n}{number\PYGZus{}of\PYGZus{}layers}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}size} \PYG{o}{=} \PYG{n}{output\PYGZus{}size}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{session} \PYG{o}{=} \PYG{n}{session}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{learning\PYGZus{}rate} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{constant}\PYG{p}{(}\PYG{n}{learning\PYGZus{}rate}\PYG{p}{)}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}last\PYGZus{}state} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}
+                          \PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{number\PYGZus{}of\PYGZus{}layers} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{,)}
+                          \PYG{p}{)}
+
+    \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{device}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}/device:GPU:0\PYGZsq{}}\PYG{p}{):}
+        \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{variable\PYGZus{}scope}\PYG{p}{(}\PYG{n}{name\PYGZus{}or\PYGZus{}scope}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{scope}\PYG{p}{):}
+            \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{variable\PYGZus{}scope}\PYG{p}{(}\PYG{n}{name\PYGZus{}or\PYGZus{}scope}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Input\PYGZdq{}}\PYG{p}{):}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{X} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{placeholder}\PYG{p}{(}\PYG{n}{dtype}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{,} \PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{None}\PYG{p}{,}
+                                                 \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{input\PYGZus{}size}\PYG{p}{),} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}X\PYGZdq{}}\PYG{p}{)}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{annotations} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{placeholder}\PYG{p}{(}\PYG{n}{dtype}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{,} \PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{None}\PYG{p}{,}
+                                                 \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}
+                                    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]),}
+                                    \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}annotations\PYGZdq{}}\PYG{p}{)}
+            \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{variable\PYGZus{}scope}\PYG{p}{(}\PYG{n}{name\PYGZus{}or\PYGZus{}scope}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}DropOutParams\PYGZdq{}}\PYG{p}{):}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keep\PYGZus{}prob} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{placeholder}\PYG{p}{(}\PYG{n}{dtype}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{)}
+
+            \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{name\PYGZus{}scope}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}attentionMechanism\PYGZdq{}}\PYG{p}{):}
+              \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}mechanism} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}bahdanau\PYGZdq{}}\PYG{p}{:}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attention\PYGZus{}mechanism} \PYG{o}{=} \PYG{n}{attention}\PYG{o}{.}\PYG{n}{BahdanauAttention}\PYG{p}{(}
+                                                        \PYG{n}{num\PYGZus{}units}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}length}\PYG{p}{,}
+                                                        \PYG{n}{memory}\PYG{o}{=}\PYG{p}{,}
+                                                        \PYG{n}{memory\PYGZus{}sequence\PYGZus{}length}\PYG{o}{=}\PYG{p}{)}
+              \PYG{k}{elif} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}mechanism} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}luong\PYGZdq{}}\PYG{p}{:}
+                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attention\PYGZus{}mechanism} \PYG{o}{=} \PYG{n}{attention}\PYG{o}{.}\PYG{n}{LuongAttention}\PYG{p}{(}
+                                                        \PYG{n}{num\PYGZus{}units}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}length}\PYG{p}{,}
+                                                        \PYG{n}{memory}\PYG{o}{=}\PYG{p}{,}
+                                                        \PYG{n}{memory\PYGZus{}sequence\PYGZus{}length}\PYG{o}{=}\PYG{p}{)}
+              \PYG{k}{else}\PYG{p}{:}
+                \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}
+                \PYG{l+s+s2}{\PYGZdq{}attention mechanism \PYGZsq{}}\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s+s2}{\PYGZsq{} is not defined.\PYGZdq{}} \PYG{o}{\PYGZpc{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{attn\PYGZus{}mechanism}\PYG{p}{)}
+
+            \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{name\PYGZus{}scope}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}RNN\PYGZus{}Core\PYGZdq{}}\PYG{p}{):}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}cells} \PYG{o}{=} \PYG{p}{[}\PYG{n}{GuidedAttentionCell}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{,} \PYG{n}{forget\PYGZus{}bias}\PYG{o}{=}\PYG{l+m+mf}{1.0}\PYG{p}{,}
+                                                    \PYG{n}{state\PYGZus{}is\PYGZus{}tuple}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+                                                    \PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in}
+                                                    \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{number\PYGZus{}of\PYGZus{}layers}\PYG{p}{)]}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}cells} \PYG{o}{=} \PYG{p}{[}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{rnn\PYGZus{}cell}\PYG{o}{.}\PYG{n}{DropoutWrapper}\PYG{p}{(}\PYG{n}{lstm\PYGZus{}cell}\PYG{p}{,}
+                                                    \PYG{n}{output\PYGZus{}keep\PYGZus{}prob}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keep\PYGZus{}prob}\PYG{p}{)}
+                                                    \PYG{k}{for} \PYG{n}{lstm\PYGZus{}cell} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}cells}\PYG{p}{]}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{rnn\PYGZus{}cell}\PYG{o}{.}\PYG{n}{MultiRNNCell}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}cells}\PYG{p}{,}
+                                                    \PYG{n}{state\PYGZus{}is\PYGZus{}tuple}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{rnn\PYGZus{}cell}\PYG{o}{.}\PYG{n}{DropoutWrapper}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm}\PYG{p}{,}
+                                            \PYG{n}{output\PYGZus{}keep\PYGZus{}prob}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keep\PYGZus{}prob}\PYG{p}{)}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}init\PYGZus{}states} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm}\PYG{o}{.}\PYG{n}{zero\PYGZus{}state}\PYG{p}{(}
+                                \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{X}\PYG{p}{)[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{)}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{outputs}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}current\PYGZus{}state} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{dynamic\PYGZus{}rnn}\PYG{p}{(}
+                                                    \PYG{n}{cell}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm}\PYG{p}{,} \PYG{n}{inputs}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{X}\PYG{p}{,}
+                                                    \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{,} \PYG{n}{time\PYGZus{}major}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}
+                                                    \PYG{n}{initial\PYGZus{}state}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}init\PYGZus{}states}\PYG{p}{)}
+
+            \PYG{k}{with} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{variable\PYGZus{}scope}\PYG{p}{(}\PYG{n}{name\PYGZus{}or\PYGZus{}scope}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Output\PYGZdq{}}\PYG{p}{):}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{OUT\PYGZus{}W} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{initial\PYGZus{}value}\PYG{o}{=}
+                        \PYG{n}{tf}\PYG{o}{.}\PYG{n}{random\PYGZus{}normal}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}size}\PYG{p}{),}
+                                        \PYG{n}{stddev}\PYG{o}{=}\PYG{l+m+mf}{0.01}\PYG{p}{,} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}output\PYGZus{}W\PYGZdq{}}\PYG{p}{))}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{OUT\PYGZus{}B} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{initial\PYGZus{}value}\PYG{o}{=}
+                                      \PYG{n}{tf}\PYG{o}{.}\PYG{n}{random\PYGZus{}normal}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}size}\PYG{p}{,),}
+                                        \PYG{n}{stddev}\PYG{o}{=}\PYG{l+m+mf}{0.01}\PYG{p}{,} \PYG{n}{name}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}output\PYGZus{}B\PYGZdq{}}\PYG{p}{))}
+
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{outputs\PYGZus{}reshaped} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{tensor}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{outputs}\PYG{p}{,}
+                                            \PYG{n}{shape}\PYG{o}{=}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{])}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{net\PYGZus{}out} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{batch\PYGZus{}normalization}\PYG{p}{(}\PYG{n}{x}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}
+                                  \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{outputs\PYGZus{}reshaped}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{OUT\PYGZus{}W}\PYG{p}{)} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{OUT\PYGZus{}B}\PYG{p}{,}
+                                  \PYG{n}{mean}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{variance}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{offset}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{scale}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,}
+                                  \PYG{n}{variance\PYGZus{}epsilon}\PYG{o}{=}\PYG{l+m+mf}{1e\PYGZhy{}10}\PYG{p}{)}
+
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{batch\PYGZus{}time\PYGZus{}shape} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{outputs}\PYG{p}{)}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{final\PYGZus{}output} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{net\PYGZus{}out}\PYG{p}{,}
+                                              \PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{batch\PYGZus{}time\PYGZus{}shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}
+                                              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{batch\PYGZus{}time\PYGZus{}shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],}
+                                              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}size}\PYG{p}{))}
+
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{Y} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{placeholder}\PYG{p}{(}\PYG{n}{dtype}\PYG{o}{=}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{float32}\PYG{p}{,}
+                                      \PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}size}\PYG{p}{))}
+
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{Y\PYGZus{}long} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{tensor}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{Y}\PYG{p}{,} \PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{output\PYGZus{}size}\PYG{p}{))}
+
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{reduce\PYGZus{}sum}\PYG{p}{(}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{losses}\PYG{o}{.}\PYG{n}{absolute\PYGZus{}difference}\PYG{p}{(}
+                                        \PYG{n}{predictions}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{softmax\PYGZus{}net\PYGZus{}out}\PYG{p}{,}
+                                        \PYG{n}{labels}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{Y\PYGZus{}long}\PYG{p}{))}
+
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{train\PYGZus{}op} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{train}\PYG{o}{.}\PYG{n}{AdamOptimizer}\PYG{p}{(}
+                              \PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{learning\PYGZus{}rate}\PYG{p}{)}\PYG{o}{.}\PYG{n}{minimize}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost}\PYG{p}{)}
+              \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{print\PYGZus{}number\PYGZus{}of\PYGZus{}parameters}\PYG{p}{()}
+
+  \PYG{k}{def} \PYG{n+nf}{run\PYGZus{}step}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{annotations}\PYG{o}{=}\PYG{n+nb+bp}{None}\PYG{p}{,} \PYG{n}{init\PYGZus{}zero\PYGZus{}state}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{keep\PYGZus{}prob}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{k}{if} \PYG{n}{init\PYGZus{}zero\PYGZus{}state}\PYG{p}{:}
+      \PYG{n}{init\PYGZus{}value} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{number\PYGZus{}of\PYGZus{}layers} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{,))}
+    \PYG{k}{else}\PYG{p}{:}
+      \PYG{n}{init\PYGZus{}value} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}last\PYGZus{}state}
+
+    \PYG{n}{out}\PYG{p}{,} \PYG{n}{next\PYGZus{}lstm\PYGZus{}state} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{session}\PYG{o}{.}\PYG{n}{run}\PYG{p}{([}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{final\PYGZus{}output}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}current\PYGZus{}state}\PYG{p}{],}
+                                            \PYG{n}{feed\PYGZus{}dict}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{X}\PYG{p}{:} \PYG{n}{X}\PYG{p}{,}
+                                                      \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{annotations}\PYG{p}{:} \PYG{n}{annotations}\PYG{p}{,}
+                                                      \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keep\PYGZus{}prob}\PYG{p}{:} \PYG{n}{keep\PYGZus{}prob}\PYG{p}{\PYGZcb{})}
+
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}last\PYGZus{}state} \PYG{o}{=} \PYG{n}{next\PYGZus{}lstm\PYGZus{}state}\PYG{p}{[}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{next\PYGZus{}lstm\PYGZus{}state}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{k}{return} \PYG{n}{out}
+
+  \PYG{k}{def} \PYG{n+nf}{train\PYGZus{}batch}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{Xbatch}\PYG{p}{,} \PYG{n}{annotationsBatch}\PYG{p}{,} \PYG{n}{Ybatch}\PYG{p}{,} \PYG{n}{keep\PYGZus{}prob}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{init\PYGZus{}value} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{Xbatch}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{number\PYGZus{}of\PYGZus{}layers} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{))}
+
+    \PYG{n}{cost}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{session}\PYG{o}{.}\PYG{n}{run}\PYG{p}{([}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{cost}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{train\PYGZus{}op}\PYG{p}{],}
+                                \PYG{n}{feed\PYGZus{}dict}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{X}\PYG{p}{:} \PYG{n}{Xbatch}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{Y}\PYG{p}{:} \PYG{n}{Ybatch}\PYG{p}{,}
+                                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{annotations}\PYG{p}{:} \PYG{n}{annotationsBatch}\PYG{p}{,}
+                                \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{keep\PYGZus{}prob}\PYG{p}{:} \PYG{n}{keep\PYGZus{}prob}\PYG{p}{\PYGZcb{})}
+
+    \PYG{k}{return} \PYG{n}{cost}
+
+  \PYG{n+nd}{@staticmethod}
+  \PYG{k}{def} \PYG{n+nf}{print\PYGZus{}number\PYGZus{}of\PYGZus{}parameters}\PYG{p}{():}
+    \PYG{n}{total\PYGZus{}parameters} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{for} \PYG{n}{variable} \PYG{o+ow}{in} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{trainable\PYGZus{}variables}\PYG{p}{():}
+      \PYG{n}{shape} \PYG{o}{=} \PYG{n}{variable}\PYG{o}{.}\PYG{n}{get\PYGZus{}shape}\PYG{p}{()}
+      \PYG{n}{variable\PYGZus{}parameters} \PYG{o}{=} \PYG{l+m+mi}{1}
+      \PYG{k}{for} \PYG{n}{dim} \PYG{o+ow}{in} \PYG{n}{shape}\PYG{p}{:}
+        \PYG{n}{variable\PYGZus{}parameters} \PYG{o}{*=} \PYG{n}{dim}\PYG{o}{.}\PYG{n}{value}
+      \PYG{n}{total\PYGZus{}parameters} \PYG{o}{+=} \PYG{n}{variable\PYGZus{}parameters}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}total number of parameters: \PYGZdq{}}\PYG{p}{,} \PYG{n}{total\PYGZus{}parameters}\PYG{p}{)}
+\end{Verbatim}

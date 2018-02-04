@@ -1,0 +1,62 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{getNextBatch}\PYG{p}{(}\PYG{n}{batchId}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{vocab}\PYG{p}{,} \PYG{n}{word2ind}\PYG{p}{):}
+  \PYG{n}{batchInstanceCount} \PYG{o}{=} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}insts}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{rawCaptions}\PYG{p}{))}
+  \PYG{n}{batchData} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{time\PYGZus{}step}\PYG{p}{,}
+  \PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{layer1\PYGZus{}size}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}size}\PYG{p}{))}
+  \PYG{n}{batchLabel} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{time\PYGZus{}step}\PYG{p}{,}
+  \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{word\PYGZus{}embedding\PYGZus{}size}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}size}\PYG{p}{))}
+  \PYG{n}{batchImgs} \PYG{o}{=} \PYG{p}{[]}
+  \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{batchInstanceCount} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{embeddedCaptionInsts}\PYG{p}{,} \PYG{n}{instImgFileNames}\PYG{p}{,} \PYG{n}{embeddedLabels} \PYG{o}{=}
+    \PYG{n}{getNextInstance}\PYG{p}{(}\PYG{n}{i} \PYG{o}{+} \PYG{n}{batchId}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,}
+                    \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{rnn\PYGZus{}utils}\PYG{p}{,} \PYG{n}{vocab}\PYG{p}{,} \PYG{n}{word2ind}\PYG{o}{=}\PYG{n}{word2ind}\PYG{p}{)}
+    \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{offset} \PYG{o}{=} \PYG{n}{i} \PYG{o}{*} \PYG{l+m+mi}{5}
+    \PYG{k}{for} \PYG{n}{embeddedCaptionInst} \PYG{o+ow}{in} \PYG{n}{embeddedCaptionInsts}\PYG{p}{:}
+      \PYG{n}{batchData}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{embeddedCaptionInst}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{p}{:,} \PYG{n}{offset} \PYG{o}{+} \PYG{n}{cnt}\PYG{p}{]} \PYG{o}{=}
+      \PYG{n}{embeddedCaptionInst}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{time\PYGZus{}step}\PYG{p}{,}
+      \PYG{n}{embeddedCaptionInst}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{]}
+      \PYG{n}{cnt} \PYG{o}{+=} \PYG{l+m+mi}{1}
+    \PYG{n}{cnt} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{for} \PYG{n}{embeddedLabel} \PYG{o+ow}{in} \PYG{n}{embeddedLabels}\PYG{p}{:}
+      \PYG{n}{batchLabel}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{embeddedLabel}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{p}{:,} \PYG{n}{offset} \PYG{o}{+} \PYG{n}{cnt}\PYG{p}{]} \PYG{o}{=}
+      \PYG{n}{embeddedLabel}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{time\PYGZus{}step}\PYG{p}{]}
+      \PYG{n}{cnt} \PYG{o}{+=} \PYG{l+m+mi}{1}
+    \PYG{k}{for} \PYG{n}{instImgFileName} \PYG{o+ow}{in} \PYG{n}{instImgFileNames}\PYG{p}{:}
+      \PYG{n}{batchImgs}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{instImgFileName}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{batchData}\PYG{p}{,} \PYG{n}{batchImgs}\PYG{p}{,} \PYG{n}{batchLabel}
+
+
+\PYG{k}{def} \PYG{n+nf}{getNextInstance}\PYG{p}{(}\PYG{n}{iteration}\PYG{p}{,} \PYG{n}{data}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{,} \PYG{n}{vocab}\PYG{p}{,} \PYG{n}{word2ind}\PYG{p}{):}
+  \PYG{k}{global} \PYG{n}{testLabel}
+  \PYG{n}{inst\PYGZus{}image} \PYG{o}{=} \PYG{p}{[}\PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{imgs}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{imgs}\PYG{p}{][}\PYG{n}{iteration} \PYG{o}{\PYGZpc{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)]}
+  \PYG{n}{dataInsts} \PYG{o}{=} \PYG{p}{[}\PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{anns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{anns} \PYG{k}{if} \PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{anns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+  \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}image\PYGZus{}id\PYGZdq{}}\PYG{p}{]} \PYG{o}{==} \PYG{n}{inst\PYGZus{}image}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}id\PYGZdq{}}\PYG{p}{]]}
+  \PYG{n}{embeddedCaptions} \PYG{o}{=} \PYG{p}{[}\PYG{n}{rnnUtils}\PYG{o}{.}\PYG{n}{embed\PYGZus{}inst\PYGZus{}to\PYGZus{}vocab}\PYG{p}{(}\PYG{n}{dataInst}\PYG{o}{=}
+  \PYG{n}{dataInsts}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{cocoHelper}\PYG{o}{=}\PYG{n}{cocoHelper}\PYG{p}{)} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{dataInsts}\PYG{p}{))]}
+  \PYG{n}{embeddedLabels} \PYG{o}{=} \PYG{p}{[}\PYG{n}{rnnUtils}\PYG{o}{.}\PYG{n}{embed\PYGZus{}inst\PYGZus{}to\PYGZus{}vocab}\PYG{p}{(}\PYG{n}{dataInst}\PYG{o}{=}\PYG{n}{dataInsts}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],}
+  \PYG{n}{cocoHelper}\PYG{o}{=}\PYG{n}{cocoHelper}\PYG{p}{)} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{dataInsts}\PYG{p}{))]}
+  \PYG{n}{inst\PYGZus{}image\PYGZus{}filenames} \PYG{o}{=} \PYG{p}{[}\PYG{n}{inst\PYGZus{}image}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}file\PYGZus{}name\PYGZdq{}}\PYG{p}{]} \PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{dataInsts}\PYG{p}{))]}
+  \PYG{n}{testLabel}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{dataInsts}\PYG{p}{)}
+  \PYG{k}{return} \PYG{n}{embeddedCaptions}\PYG{p}{,} \PYG{n}{inst\PYGZus{}image\PYGZus{}filenames}\PYG{p}{,} \PYG{n}{embeddedLabels}
+
+\PYG{k}{def} \PYG{n+nf}{extractNextBatch}\PYG{p}{(}\PYG{n}{batchId}\PYG{p}{,} \PYG{n}{capWord2Ind}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,}
+                      \PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{validation\PYGZus{}mode}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{):}
+  \PYG{k}{global} \PYG{n}{batch\PYGZus{}data\PYGZus{}buffer}\PYG{p}{,} \PYG{n}{batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer}\PYG{p}{,} \PYG{n}{batch\PYGZus{}label\PYGZus{}buffer}
+  \PYG{k}{global} \PYG{n}{test\PYGZus{}batch\PYGZus{}data\PYGZus{}buffer}\PYG{p}{,} \PYG{n}{test\PYGZus{}batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer}
+  \PYG{k}{global} \PYG{n}{test\PYGZus{}batch\PYGZus{}label\PYGZus{}buffer}
+  \PYG{n}{batch\PYGZus{}data}\PYG{p}{,} \PYG{n}{batch\PYGZus{}img\PYGZus{}filename}\PYG{p}{,} \PYG{n}{batch\PYGZus{}label} \PYG{o}{=} \PYG{n}{getNextBatch}\PYG{p}{(}\PYG{n}{batchId}\PYG{o}{=}\PYG{n}{batchId}\PYG{p}{,}
+  \PYG{n}{rawCaptions}\PYG{o}{=}\PYG{n}{rawCaptions}\PYG{p}{,}
+  \PYG{n}{cocoHelper}\PYG{o}{=}\PYG{n}{cocoHelper}\PYG{p}{,}
+  \PYG{n}{rnnOptions}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{p}{,}
+  \PYG{n}{vocab}\PYG{o}{=}\PYG{n}{captionsDict}\PYG{p}{,}
+  \PYG{n}{word2ind}\PYG{o}{=}\PYG{n}{capWord2Ind}\PYG{p}{)}
+  \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{validation\PYGZus{}mode}\PYG{p}{:}
+    \PYG{n}{batch\PYGZus{}data\PYGZus{}buffer} \PYG{o}{=} \PYG{n}{batch\PYGZus{}data}
+    \PYG{n}{batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer} \PYG{o}{=} \PYG{n}{batch\PYGZus{}img\PYGZus{}filename}
+    \PYG{n}{batch\PYGZus{}label\PYGZus{}buffer} \PYG{o}{=} \PYG{n}{batch\PYGZus{}label}
+  \PYG{k}{else}\PYG{p}{:}
+    \PYG{n}{test\PYGZus{}batch\PYGZus{}data\PYGZus{}buffer} \PYG{o}{=} \PYG{n}{batch\PYGZus{}data}
+    \PYG{n}{test\PYGZus{}batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer} \PYG{o}{=} \PYG{n}{batch\PYGZus{}img\PYGZus{}filename}
+    \PYG{n}{test\PYGZus{}batch\PYGZus{}label\PYGZus{}buffer} \PYG{o}{=} \PYG{n}{batch\PYGZus{}label}
+\end{Verbatim}

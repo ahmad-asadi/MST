@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{create\PYGZus{}word2vec}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{):}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}creating word embeddings structure\PYGZdq{}}\PYG{p}{)}
+  \PYG{n}{sentences} \PYG{o}{=} \PYG{p}{[}\PYG{n}{re}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}[\PYGZbs{}W]+\PYGZdq{}}\PYG{p}{,} \PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{anns}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}caption\PYGZdq{}}\PYG{p}{])}\PYG{o}{.}\PYG{n}{lower}\PYG{p}{())} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{anns}\PYG{p}{]}
+  \PYG{n}{iteration\PYGZus{}count} \PYG{o}{=} \PYG{l+m+mi}{1}
+  \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{word2vec} \PYG{o}{=} \PYG{n}{Word2Vec}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{o}{=}\PYG{n}{iteration\PYGZus{}count}\PYG{p}{,} \PYG{n}{min\PYGZus{}count}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{size}\PYG{o}{=}\PYG{l+m+mi}{512}\PYG{p}{,} \PYG{n}{workers}\PYG{o}{=}\PYG{l+m+mi}{8}\PYG{p}{)}
+  \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{word2vec\PYGZus{}vocab} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{build\PYGZus{}vocab}\PYG{p}{(}\PYG{n}{sentences}\PYG{o}{=}\PYG{n}{sentences}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}training word embeddings\PYGZdq{}}\PYG{p}{)}
+  \PYG{n}{loss\PYGZus{}value} \PYG{o}{=} \PYG{l+m+mi}{1000000}
+  \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}
+  \PYG{k}{while} \PYG{n}{loss\PYGZus{}value} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{540000} \PYG{o+ow}{and} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{iteration\PYGZus{}count}\PYG{p}{:}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{train}\PYG{p}{(}\PYG{n}{sentences}\PYG{o}{=}\PYG{n}{sentences}\PYG{p}{,} \PYG{n}{total\PYGZus{}examples}\PYG{o}{=}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{sentences}\PYG{p}{),} \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,}
+    \PYG{n}{compute\PYGZus{}loss}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{n}{loss\PYGZus{}value} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{get\PYGZus{}latest\PYGZus{}training\PYGZus{}loss}\PYG{p}{()}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}iteration:\PYGZdq{}}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}, loss value:\PYGZdq{}}\PYG{p}{,} \PYG{n}{loss\PYGZus{}value}\PYG{p}{)}
+    \PYG{n}{i} \PYG{o}{+=} \PYG{l+m+mi}{1}
+\end{Verbatim}

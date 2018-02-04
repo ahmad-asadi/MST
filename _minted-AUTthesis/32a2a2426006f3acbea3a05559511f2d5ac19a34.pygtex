@@ -1,0 +1,52 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{testModel}\PYG{p}{(}\PYG{n}{rnn}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{ind2word}\PYG{p}{,} \PYG{n}{word2ind}\PYG{p}{,} \PYG{n}{vocab}\PYG{p}{,}
+               \PYG{n}{raw\PYGZus{}captions}\PYG{p}{,} \PYG{n}{cnn}\PYG{p}{,} \PYG{n}{data\PYGZus{}dir}\PYG{p}{):}
+  \PYG{k}{global} \PYG{n}{testLabel}
+  \PYG{n}{testLabel} \PYG{o}{=} \PYG{p}{[]}
+  \PYG{n}{extractNextBatch}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{capWord2Ind}\PYG{o}{=}\PYG{n}{word2ind}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{o}{=}\PYG{n}{vocab}\PYG{p}{,}
+  \PYG{n}{cocoHelper}\PYG{o}{=}\PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{o}{=}\PYG{n}{raw\PYGZus{}captions}\PYG{p}{,}
+  \PYG{n}{rnnOptions}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{validation\PYGZus{}mode}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+  \PYG{n}{batchData} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{test\PYGZus{}batch\PYGZus{}data\PYGZus{}buffer}\PYG{p}{)}
+  \PYG{n}{batchImgFileName} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{test\PYGZus{}batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer}\PYG{p}{)}
+  \PYG{n}{batchLabelRaw} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{test\PYGZus{}batch\PYGZus{}label\PYGZus{}buffer}\PYG{p}{)}
+  \PYG{n}{batchInput} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{n}{batchLabel} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{n}{batchImageFeatures} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{k}{for} \PYG{n}{batchCnt} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{batchImgFileName}\PYG{p}{)):}
+    \PYG{n}{imageFeatures} \PYG{o}{=} \PYG{n}{cnn}\PYG{o}{.}\PYG{n}{extract\PYGZus{}features}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}val2014/\PYGZdq{}}
+    \PYG{o}{+} \PYG{n}{batchImgFileName}\PYG{p}{[}\PYG{n}{batchCnt}\PYG{p}{]))}
+    \PYG{n}{imageFeatures} \PYG{o}{=} \PYG{n}{imageFeatures}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+    \PYG{n}{batchInput}\PYG{p}{[:,} \PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{batchData}\PYG{p}{[:,} \PYG{p}{:,} \PYG{n}{batchCnt}\PYG{p}{]}
+    \PYG{n}{batchImageFeatures}\PYG{p}{[}\PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{imageFeatures}
+    \PYG{n}{batchLabel}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{batchLabel}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{p}{[}
+    \PYG{n}{batchLabelRaw}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{p}{:,} \PYG{n}{batchCnt}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in}
+    \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{p}{]}
+  \PYG{n}{predicted\PYGZus{}captions} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}} \PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}insts}\PYG{p}{)]}
+  \PYG{n}{BLEUScores} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}insts}\PYG{p}{)}
+  \PYG{n}{test\PYGZus{}input} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchInput}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{batchInput}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]))}
+  \PYG{n}{test\PYGZus{}image\PYGZus{}features} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{batchImageFeatures}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],}
+  \PYG{n}{batchImageFeatures}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]))}
+  \PYG{k}{for} \PYG{n}{batch\PYGZus{}inst} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}insts} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{i} \PYG{o}{=} \PYG{n}{batch\PYGZus{}inst} \PYG{o}{*} \PYG{l+m+mi}{5}
+    \PYG{n}{test\PYGZus{}input}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{batchInput}\PYG{p}{[:,} \PYG{n}{i}\PYG{p}{,} \PYG{p}{:]}
+    \PYG{n}{out} \PYG{o}{=} \PYG{n}{rnn}\PYG{o}{.}\PYG{n}{run\PYGZus{}step}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{test\PYGZus{}input}\PYG{p}{,} \PYG{n}{annotations}\PYG{o}{=}\PYG{n}{batchImageFeatures}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,} \PYG{p}{:,} \PYG{p}{:],}
+    \PYG{n}{init\PYGZus{}zero\PYGZus{}state}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{testInd} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{time\PYGZus{}step} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{new\PYGZus{}word} \PYG{o}{=} \PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{most\PYGZus{}similar}\PYG{p}{(}\PYG{n}{positive}\PYG{o}{=}\PYG{p}{[}\PYG{n}{out}\PYG{p}{],} \PYG{n}{topn}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{predicted\PYGZus{}captions}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{]} \PYG{o}{+=} \PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}} \PYG{o}{+} \PYG{n}{new\PYGZus{}word}
+    \PYG{n}{batchInput}\PYG{p}{[}\PYG{n}{testInd} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{layer1\PYGZus{}size}\PYG{p}{]} \PYG{o}{=}
+    \PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{word2vec}\PYG{p}{[}\PYG{n}{new\PYGZus{}word}\PYG{p}{]}
+    \PYG{n}{test\PYGZus{}input}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{batchInput}\PYG{p}{[:,} \PYG{n}{i}\PYG{p}{,} \PYG{p}{:]}
+    \PYG{n}{out} \PYG{o}{=} \PYG{n}{rnn}\PYG{o}{.}\PYG{n}{run\PYGZus{}step}\PYG{p}{(}\PYG{n}{X}\PYG{o}{=}\PYG{n}{test\PYGZus{}input}\PYG{p}{,} \PYG{n}{init\PYGZus{}zero\PYGZus{}state}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{)[}\PYG{n}{testInd} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{n}{out} \PYG{o}{=} \PYG{n}{out}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+  \PYG{n}{BLEUScores}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{]} \PYG{o}{=} \PYG{n}{nltk}\PYG{o}{.}\PYG{n}{translate}\PYG{o}{.}\PYG{n}{bleu\PYGZus{}score}\PYG{o}{.}\PYG{n}{sentence\PYGZus{}bleu}\PYG{p}{(}
+  \PYG{p}{[}\PYG{n}{ref}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}caption\PYGZdq{}}\PYG{p}{]} \PYG{k}{for} \PYG{n}{ref} \PYG{o+ow}{in} \PYG{n}{testLabel}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{]],}
+  \PYG{n}{predicted\PYGZus{}captions}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{],} \PYG{n}{emulate\PYGZus{}multibleu}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}prediction: \PYGZdq{}}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}:\PYGZdq{}}\PYG{p}{,} \PYG{n}{predicted\PYGZus{}captions}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{])}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}human label: \PYGZdq{}}\PYG{p}{,} \PYG{n}{testLabel}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{])}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}BLEU SCORE: \PYGZdq{}}\PYG{p}{,} \PYG{n}{BLEUScores}\PYG{p}{[}\PYG{n}{batch\PYGZus{}inst}\PYG{p}{])}
+\end{Verbatim}

@@ -1,0 +1,69 @@
+\edef \SavedTocDepth {\the \value {tocdepth}}
+\setcounter {tocdepth}{-10}
+\contentsline {chapter}{فهرست اشکال}{د}{section*.4}
+\contentsline {chapter}{فهرست جداول}{و}{section*.5}
+\par عنوان\hfill صفحه \par 
+\setcounter {tocdepth}{\SavedTocDepth }
+\contentsline {chapter}{\numberline {1}مقدمه}{1}{chapter.1}
+\contentsline {section}{\numberline {1‏-‏1}بیان مساله}{2}{section.1.1}
+\contentsline {section}{\numberline {1‏-‏2}نگاهی بر سیر پژوهش‌های پیشین}{3}{section.1.2}
+\contentsline {section}{\numberline {1‏-‏3}نگاهی بر ایده پژوهش}{8}{section.1.3}
+\contentsline {section}{\numberline {1‏-‏4}خلاصه فصول بعدی}{9}{section.1.4}
+\contentsline {chapter}{\numberline {2}مروری بر مطالعات گذشته}{10}{chapter.2}
+\contentsline {section}{\numberline {2‏-‏1}مقدمه}{11}{section.2.1}
+\contentsline {section}{\numberline {2‏-‏2}پژوهش‌های انجام‌شده در زمینه درک صحنه توسط مغز انسان}{11}{section.2.2}
+\contentsline {subsubsection}{نتایج به‌دست‌ آمده از آزمایشات}{13}{section*.12}
+\contentsline {section}{\numberline {2‏-‏3}روش‌های مبتنی بر مدل‌های گرافی-احتمالی}{14}{section.2.3}
+\contentsline {subsection}{\numberline {2‏-‏3‏-‏1}استفاده از مدل میدان تصادفی مارکف}{15}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2‏-‏3‏-‏2}استفاده از مدل میدان تصادفی شرطی}{18}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2‏-‏3‏-‏3}استفاده از سایر مدل‌های گرافی احتمالی}{20}{subsection.2.3.3}
+\contentsline {section}{\numberline {2‏-‏4}روش‌های مبتنی بر شبکه‌های عصبی کانولوشنی عمیق}{25}{section.2.4}
+\contentsline {subsection}{\numberline {2‏-‏4‏-‏1}اختصاص معنا به قطعه‌های مختلف تصویر}{26}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2‏-‏4‏-‏2}ناحیه‌بندی عمیق تصاویر به منظور نگاشت دوطرفه جملات و تصاویر}{28}{subsection.2.4.2}
+\contentsline {subsection}{\numberline {2‏-‏4‏-‏3}مدل دوطرفه نگاشت تصاویر و جملات مبتنی بر یادگیری عمیق}{32}{subsection.2.4.3}
+\contentsline {subsection}{\numberline {2‏-‏4‏-‏4}مدل زبانی مبتنی بر شبکه عصبی بازگشتی}{33}{subsection.2.4.4}
+\contentsline {subsection}{\numberline {2‏-‏4‏-‏5}مدل دوطرفه نگاشت تصاویر و جملات با استفاده از شبکه عصبی بازگشتی}{34}{subsection.2.4.5}
+\contentsline {section}{\numberline {2‏-‏5}تولید شرح بر تصاویر با استفاده از روش‌های مبتنی بر توجه بصری}{37}{section.2.5}
+\contentsline {subsection}{\numberline {2‏-‏5‏-‏1}روش‌های مبتنی بر توجه بصری در حوزه ترجمه ماشینی}{37}{subsection.2.5.1}
+\contentsline {subsubsection}{رمزگذار}{37}{section*.42}
+\contentsline {subsubsection}{رمزگشا}{38}{section*.45}
+\contentsline {subsubsection}{ایده اصلی استفاده از توجه بصری}{39}{section*.47}
+\contentsline {subsubsection}{رمزگشا در روش مبتنی بر توجه بصری}{40}{section*.48}
+\contentsline {subsubsection}{رمزگذار در روش مبتنی بر توجه بصری}{41}{section*.55}
+\contentsline {subsection}{\numberline {2‏-‏5‏-‏2}روش‌های مبتنی بر توجه بصری در حوزه تولید شرح متناظر تصویر}{42}{subsection.2.5.2}
+\contentsline {subsubsection}{تولید شرح متناظر تصویر با استفاده از توجه بصری و شبکه‌های عصبی}{42}{section*.57}
+\contentsline {subsection}{\numberline {2‏-‏5‏-‏3}فعالیت‌های مشابه دیگر}{47}{subsection.2.5.3}
+\contentsline {section}{\numberline {2‏-‏6}جمع‌بندی}{48}{section.2.6}
+\contentsline {chapter}{\numberline {3}روش ارائه شده در پژوهش}{54}{chapter.3}
+\contentsline {section}{\numberline {3‏-‏1}مقدمه}{55}{section.3.1}
+\contentsline {section}{\numberline {3‏-‏2}رمزگذار}{55}{section.3.2}
+\contentsline {section}{\numberline {3‏-‏3}رمزگشا}{57}{section.3.3}
+\contentsline {subsection}{\numberline {3‏-‏3‏-‏1}معماری رمزگشا}{57}{subsection.3.3.1}
+\contentsline {subsubsection}{ارائه ایده اصلی برای بهبود روش}{59}{section*.104}
+\contentsline {subsection}{\numberline {3‏-‏3‏-‏2}جاسازی کلمات}{60}{subsection.3.3.2}
+\contentsline {section}{\numberline {3‏-‏4}نحوه آموزش و تست شبکه}{62}{section.3.4}
+\contentsline {section}{\numberline {3‏-‏5}جمع‌بندی}{62}{section.3.5}
+\contentsline {chapter}{\numberline {4}پیاده‌سازی، آزمون و ارزیابی}{65}{chapter.4}
+\contentsline {section}{\numberline {4‏-‏1}مقدمه}{66}{section.4.1}
+\contentsline {section}{\numberline {4‏-‏2}پیاده‌سازی}{66}{section.4.2}
+\contentsline {subsection}{\numberline {4‏-‏2‏-‏1}چارچوب کاری تنسورفلو}{66}{subsection.4.2.1}
+\contentsline {section}{\numberline {4‏-‏3}معیار \lr {BLEU} \cite {papineni2002bleu}}{67}{section.4.3}
+\contentsline {section}{\numberline {4‏-‏4}معیار \lr {METEOR}\cite {lavie2007meteor}}{67}{section.4.4}
+\contentsline {section}{\numberline {4‏-‏5}معیار \lr {ROUGE-L}\cite {lin2004rouge}}{68}{section.4.5}
+\contentsline {section}{\numberline {4‏-‏6}معیار \lr {CIDEr}\cite {vedantam2015cider}}{68}{section.4.6}
+\contentsline {section}{\numberline {4‏-‏7}آزمایشات}{69}{section.4.7}
+\contentsline {subsection}{\numberline {4‏-‏7‏-‏1}معرفی مجموعه‌داده}{69}{subsection.4.7.1}
+\contentsline {subsection}{\numberline {4‏-‏7‏-‏2}نمونه‌هایی از خروجی‌ها}{69}{subsection.4.7.2}
+\contentsline {subsubsection}{خروجی‌های صحیح}{69}{section*.111}
+\contentsline {subsubsection}{خروجی‌های غلط}{70}{section*.113}
+\contentsline {subsection}{\numberline {4‏-‏7‏-‏3}مقایسه با روش‌های مشابه}{70}{subsection.4.7.3}
+\contentsline {subsubsection}{تعداد پارامترها}{70}{section*.115}
+\contentsline {subsubsection}{معیار \lr {BLEU}}{71}{section*.116}
+\contentsline {section}{\numberline {4‏-‏8}بحث درباره نتایج و عملکرد شبکه}{71}{section.4.8}
+\contentsline {section}{\numberline {4‏-‏9}جمع‌بندی}{71}{section.4.9}
+\contentsline {chapter}{\numberline {5}جمع‌بندي، نتيجه‌گيري و پیشنهادات}{72}{chapter.5}
+\contentsline {chapter}{منابع و مراجع}{76}{appendix*.117}
+\contentsline {chapter}{پیوست}{80}{appendix*.118}
+\contentsline {chapter}{واژه‌نامه‌ی فارسی به انگلیسی}{97}{appendix*.125}
+\contentsline {chapter}{واژه‌نامه‌ی انگلیسی به فارسی}{99}{appendix*.126}
+\contentsfinish 

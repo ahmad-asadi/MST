@@ -1,0 +1,53 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{printGraph}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{cnn}\PYG{p}{):}
+\PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}writing graphs to /tmp/graph in order to show it in tensor board\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{writer} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{summary}\PYG{o}{.}\PYG{n}{FileWriter}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/tmp/graph\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{writer}\PYG{o}{.}\PYG{n}{add\PYGZus{}graph}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{session}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{)}
+\PYG{n}{writer}\PYG{o}{.}\PYG{n}{add\PYGZus{}graph}\PYG{p}{(}\PYG{n}{cnn}\PYG{p}{)}
+
+
+\PYG{k}{def} \PYG{n+nf}{createAndInitializeDecoder}\PYG{p}{(}\PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{imageFeaturesSize}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{,}
+                        \PYG{n}{word\PYGZus{}embedding\PYGZus{}size}\PYG{p}{,} \PYG{n}{cnn}\PYG{p}{):}
+\PYG{n}{rnnOptions} \PYG{o}{=} \PYG{n}{DecoderUtils}\PYG{o}{.}\PYG{n}{RNNOptions}\PYG{p}{(}\PYG{n}{vocab}\PYG{o}{=}\PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{o}{=}\PYG{n}{rnnUtils}\PYG{p}{,}
+\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{o}{=}\PYG{n}{imageFeaturesSize}\PYG{p}{,}
+\PYG{n}{word\PYGZus{}embedding\PYGZus{}size}\PYG{o}{=}\PYG{n}{word\PYGZus{}embedding\PYGZus{}size}\PYG{p}{)}
+\PYG{n}{rnn} \PYG{o}{=} \PYG{n}{Decoder}\PYG{o}{.}\PYG{n}{StackedRNN}\PYG{p}{(}\PYG{n}{input\PYGZus{}size}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{input\PYGZus{}size}\PYG{p}{,} \PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{o}{=}
+\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{,}
+\PYG{n}{lstm\PYGZus{}size}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{lstm\PYGZus{}size}\PYG{p}{,} \PYG{n}{number\PYGZus{}of\PYGZus{}layers}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{num\PYGZus{}layers}\PYG{p}{,}
+\PYG{n}{output\PYGZus{}size}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{out\PYGZus{}size}\PYG{p}{,} \PYG{n}{session}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{session}\PYG{p}{,}
+\PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{learning\PYGZus{}rate}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}size}\PYG{p}{,}
+\PYG{n}{name}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{name}\PYG{p}{,} \PYG{n}{cnn\PYGZus{}graph}\PYG{o}{=}\PYG{n}{cnn}\PYG{o}{.}\PYG{n}{net}\PYG{o}{.}\PYG{n}{session}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{)}
+\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{session}\PYG{o}{.}\PYG{n}{run}\PYG{p}{(}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{global\PYGZus{}variables\PYGZus{}initializer}\PYG{p}{())}
+\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{saver} \PYG{o}{=} \PYG{n}{tf}\PYG{o}{.}\PYG{n}{train}\PYG{o}{.}\PYG{n}{Saver}\PYG{p}{(}\PYG{n}{tf}\PYG{o}{.}\PYG{n}{global\PYGZus{}variables}\PYG{p}{())}
+\PYG{k}{return} \PYG{n}{rnn}\PYG{p}{,} \PYG{n}{rnnOptions}
+
+
+\PYG{k}{def} \PYG{n+nf}{createEncoder}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{):}
+\PYG{n}{cnn} \PYG{o}{=} \PYG{n}{Encoder}\PYG{o}{.}\PYG{n}{CNN}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}train2014\PYGZdq{}}\PYG{p}{))}
+\PYG{k}{return} \PYG{n}{cnn}
+
+
+\PYG{k}{def} \PYG{n+nf}{loadDataset}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{):}
+\PYG{n}{cocoHelper} \PYG{o}{=} \PYG{n}{data\PYGZus{}helper}\PYG{o}{.}\PYG{n}{COCOHelper}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir} \PYG{o}{+}
+\PYG{l+s+s2}{\PYGZdq{}annotations/captions\PYGZus{}train2014.json\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{capIndToWord}\PYG{p}{,} \PYG{n}{capWordToInd}\PYG{p}{,} \PYG{n}{capIndToWord} \PYG{o}{=}
+\PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{extract\PYGZus{}captions}\PYG{p}{()}
+\PYG{n}{sentenceSize}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{,}
+\PYG{k}{return} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{capWordToInd}\PYG{p}{,} \PYG{n}{capIndToWord}
+
+
+\PYG{k}{def} \PYG{n+nf}{loadTestDataset}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{):}
+\PYG{n}{cocoHelper} \PYG{o}{=} \PYG{n}{data\PYGZus{}helper}\PYG{o}{.}\PYG{n}{COCOHelper}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}annotations/captions\PYGZus{}val2014.json\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{capIndToWord}\PYG{p}{,} \PYG{n}{capWordToInd}\PYG{p}{,} \PYG{n}{capIndToWord} \PYG{o}{=}
+\PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{extract\PYGZus{}captions}\PYG{p}{()}
+\PYG{n}{sentenceSize}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{,}
+\PYG{k}{return} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{capWordToInd}\PYG{p}{,} \PYG{n}{capIndToWord}
+
+
+\PYG{k}{def} \PYG{n+nf}{initializeParameters}\PYG{p}{():}
+\PYG{n}{rnnUtils} \PYG{o}{=} \PYG{n}{DecoderUtils}\PYG{o}{.}\PYG{n}{RNNUtils}\PYG{p}{()}
+\PYG{n}{data\PYGZus{}dir} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}../../Dataset/MS\PYGZhy{}COCO/\PYGZdq{}}
+\PYG{n}{imageFeaturesSize} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{64}\PYG{p}{,} \PYG{l+m+mi}{2048}\PYG{p}{]}
+\PYG{n}{maxIterCount} \PYG{o}{=} \PYG{l+m+mi}{20000}
+\PYG{k}{return} \PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{imageFeaturesSize}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{,} \PYG{n}{maxIterCount}
+\end{Verbatim}

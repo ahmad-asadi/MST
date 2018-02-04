@@ -1,0 +1,68 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: AUTthesis.aux
+A level-1 auxiliary file: chapter1.aux
+A level-1 auxiliary file: chapter2.aux
+A level-1 auxiliary file: chapter3.aux
+A level-1 auxiliary file: chapter4.aux
+A level-1 auxiliary file: chapter5.aux
+The style file: plain-fa.bst
+A level-1 auxiliary file: appendix1.aux
+A level-1 auxiliary file: dicfa2en.aux
+A level-1 auxiliary file: dicen2fa.aux
+A level-1 auxiliary file: en-abstract.aux
+Database file #1: references.bib
+Repeated entry---line 339 of file references.bib
+ : @inproceedings{mikolov2013distributed
+ :                                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 346 of file references.bib
+ : @article{kingma2014adam
+ :                        ,
+I'm skipping whatever remains of this entry
+-- plain-fa.bst version 0.9 (2015/05/09) 
+-- This is a BibTeX style for XePersian: http://www.parsilatex.com
+
+Done.
+You've used 37 entries,
+            2546 wiz_defined-function locations,
+            827 strings with 12617 characters,
+and the built_in function-call counts, 17822 in all, are:
+= -- 1614
+> -- 829
+< -- 25
++ -- 328
+- -- 288
+* -- 1130
+:= -- 2528
+add.period$ -- 121
+call.type$ -- 37
+change.case$ -- 255
+chr.to.int$ -- 0
+cite$ -- 37
+duplicate$ -- 677
+empty$ -- 1249
+format.name$ -- 288
+if$ -- 4338
+int.to.chr$ -- 0
+int.to.str$ -- 37
+missing$ -- 415
+newline$ -- 339
+num.names$ -- 74
+pop$ -- 323
+preamble$ -- 1
+purify$ -- 218
+quote$ -- 0
+skip$ -- 526
+stack$ -- 0
+substring$ -- 997
+swap$ -- 257
+text.length$ -- 25
+text.prefix$ -- 0
+top$ -- 4
+type$ -- 148
+warning$ -- 0
+while$ -- 148
+width$ -- 39
+write$ -- 527
+(There were 2 error messages)

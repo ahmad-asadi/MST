@@ -1,0 +1,94 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{start}\PYG{p}{():}
+  \PYG{k}{global} \PYG{n}{testLabel}
+  \PYG{n}{testLabel} \PYG{o}{=} \PYG{p}{[]}
+  \PYG{n}{rsrc} \PYG{o}{=} \PYG{n}{resource}\PYG{o}{.}\PYG{n}{RLIMIT\PYGZus{}DATA}
+  \PYG{n}{soft}\PYG{p}{,} \PYG{n}{hard} \PYG{o}{=} \PYG{n}{resource}\PYG{o}{.}\PYG{n}{getrlimit}\PYG{p}{(}\PYG{n}{rsrc}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Soft limit starts as  :\PYGZsq{}}\PYG{p}{,} \PYG{n}{soft}\PYG{p}{)}
+  \PYG{n}{resource}\PYG{o}{.}\PYG{n}{setrlimit}\PYG{p}{(}\PYG{n}{rsrc}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{32} \PYG{o}{*} \PYG{l+m+mi}{1024} \PYG{o}{*} \PYG{l+m+mi}{1024} \PYG{o}{*} \PYG{l+m+mi}{1024}\PYG{p}{,} \PYG{n}{hard}\PYG{p}{))}  \PYG{c+c1}{\PYGZsh{} limit to one kilobyte}
+  \PYG{c+c1}{\PYGZsh{} set logger to print logs in console}
+  \PYG{n}{logging}\PYG{o}{.}\PYG{n}{getLogger}\PYG{p}{()}\PYG{o}{.}\PYG{n}{addHandler}\PYG{p}{(}\PYG{n}{logging}\PYG{o}{.}\PYG{n}{StreamHandler}\PYG{p}{())}
+  \PYG{n}{soft}\PYG{p}{,} \PYG{n}{hard} \PYG{o}{=} \PYG{n}{resource}\PYG{o}{.}\PYG{n}{getrlimit}\PYG{p}{(}\PYG{n}{rsrc}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Soft limit changed to :\PYGZsq{}}\PYG{p}{,} \PYG{n}{soft}\PYG{p}{)}
+  \PYG{n}{plt}\PYG{o}{.}\PYG{n}{interactive}\PYG{p}{(}\PYG{n+nb+bp}{True}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}defining constants\PYGZdq{}}\PYG{p}{)}
+  \PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{imageFeaturesSize}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{,} \PYG{n}{maxIterCount} \PYG{o}{=}
+  \PYG{n}{initializeParameters}\PYG{p}{()}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}loading dataset\PYGZdq{}}\PYG{p}{)}
+  \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{capWord2Ind}\PYG{p}{,} \PYG{n}{capInd2Word} \PYG{o}{=}
+  \PYG{n}{loadDataset}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{)}
+  \PYG{n}{test\PYGZus{}cocoHelper}\PYG{p}{,} \PYG{n}{test\PYGZus{}captionsDict}\PYG{p}{,} \PYG{n}{test\PYGZus{}rawCaptions}\PYG{p}{,} \PYG{n}{test\PYGZus{}capWord2Ind}\PYG{p}{,}
+  \PYG{n}{test\PYGZus{}capInd2Word} \PYG{o}{=} \PYG{n}{loadTestDataset}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{rnnUtils}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}creating encoder\PYGZsq{}s structure\PYGZdq{}}\PYG{p}{)}
+  \PYG{n}{cnn} \PYG{o}{=} \PYG{n}{createEncoder}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{)}
+  \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}creating decoder\PYGZsq{}s structure and initialization\PYGZdq{}}\PYG{p}{)}
+  \PYG{n}{rnn}\PYG{p}{,} \PYG{n}{rnnOptions} \PYG{o}{=} \PYG{n}{createAndInitializeDecoder}\PYG{p}{(}\PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{imageFeaturesSize}\PYG{p}{,}
+  \PYG{n}{rnnUtils}\PYG{p}{,} \PYG{n}{word\PYGZus{}embedding\PYGZus{}size}\PYG{o}{=}\PYG{n}{cocoHelper}\PYG{o}{.}\PYG{n}{word2vec}\PYG{o}{.}\PYG{n}{layer1\PYGZus{}size}\PYG{p}{,} \PYG{n}{cnn}\PYG{o}{=}\PYG{n}{cnn}\PYG{p}{)}
+  \PYG{n}{printGraph}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{cnn}\PYG{o}{=}\PYG{n}{cnn}\PYG{o}{.}\PYG{n}{net}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{)}
+  \PYG{n}{extractNextBatch}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{capWord2Ind}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{p}{)}
+  \PYG{n}{batchData} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{batch\PYGZus{}data\PYGZus{}buffer}\PYG{p}{)}
+  \PYG{n}{batchImgFileName} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer}\PYG{p}{)}
+  \PYG{n}{batchLabelRaw} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{batch\PYGZus{}label\PYGZus{}buffer}\PYG{p}{)}
+  \PYG{n}{batchInput} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{n}{batchLabel} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{n}{batchImageFeatures} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{shape}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}
+  \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]))}
+  \PYG{k}{for} \PYG{n}{batchCnt} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{batchImgFileName}\PYG{p}{)):}
+    \PYG{n}{imageFeatures} \PYG{o}{=} \PYG{n}{cnn}\PYG{o}{.}\PYG{n}{extract\PYGZus{}features}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}train2014/\PYGZdq{}}
+    \PYG{o}{+} \PYG{n}{batchImgFileName}\PYG{p}{[}\PYG{n}{batchCnt}\PYG{p}{]))}
+    \PYG{n}{imageFeatures} \PYG{o}{=} \PYG{n}{imageFeatures}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{image\PYGZus{}feature\PYGZus{}size}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+    \PYG{n}{batchInput}\PYG{p}{[:,} \PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{batchData}\PYG{p}{[:,} \PYG{p}{:,} \PYG{n}{batchCnt}\PYG{p}{]}
+    \PYG{n}{batchImageFeatures}\PYG{p}{[}\PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:,} \PYG{p}{:]} \PYG{o}{=} \PYG{n}{imageFeatures}
+    \PYG{n}{batchLabel}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{batchLabel}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{batchCnt}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{=} \PYG{p}{[}
+    \PYG{n}{batchLabelRaw}\PYG{p}{[}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{p}{:,} \PYG{n}{batchCnt}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in}
+    \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{batchLabelRaw}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{p}{]}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}test image name: \PYGZdq{}}\PYG{p}{,} \PYG{n}{batchImgFileName}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}starting to train the structure\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{global} \PYG{n}{costs}
+    \PYG{n}{startTime} \PYG{o}{=} \PYG{n}{time}\PYG{o}{.}\PYG{n}{time}\PYG{p}{()}
+    \PYG{n}{costs} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{maxIterCount}\PYG{p}{)}
+    \PYG{n}{checkPoint} \PYG{o}{=} \PYG{l+m+mi}{1}
+    \PYG{n}{statShowPeriod} \PYG{o}{=} \PYG{l+m+mi}{1}
+
+  \PYG{n}{batchId} \PYG{o}{=} \PYG{l+m+mi}{0}
+  \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{maxIterCount}\PYG{p}{):}
+    \PYG{n}{loop\PYGZus{}counter} \PYG{o}{=} \PYG{n}{math}\PYG{o}{.}\PYG{n}{ceil}\PYG{p}{((}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{rawCaptions}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{5}\PYG{p}{)} \PYG{o}{/} \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{batch\PYGZus{}size}\PYG{p}{)}
+    \PYG{n}{loop\PYGZus{}counter} \PYG{o}{=} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{loop\PYGZus{}counter}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{internal\PYGZus{}loop\PYGZus{}counter} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{loop\PYGZus{}counter}\PYG{p}{):}
+      \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}iteration:\PYGZdq{}} \PYG{o}{+} \PYG{n+nb}{repr}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}, internal loop: processing \PYGZdq{}}\PYG{p}{,}
+      \PYG{l+m+mi}{100} \PYG{o}{*} \PYG{n}{internal\PYGZus{}loop\PYGZus{}counter} \PYG{o}{/} \PYG{n}{loop\PYGZus{}counter}\PYG{p}{,}
+      \PYG{l+s+s2}{\PYGZdq{}\PYGZpc{}\PYGZdq{}}\PYG{p}{)}
+      \PYG{n}{batchData} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{batch\PYGZus{}data\PYGZus{}buffer}\PYG{p}{)}
+      \PYG{n}{batchImgFileName} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{batch\PYGZus{}img\PYGZus{}filename\PYGZus{}buffer}\PYG{p}{)}
+      \PYG{n}{batchLabelRaw} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{batch\PYGZus{}label\PYGZus{}buffer}\PYG{p}{)}
+      \PYG{n}{load\PYGZus{}data\PYGZus{}process} \PYG{o}{=} \PYG{n}{Process}\PYG{p}{(}\PYG{n}{target}\PYG{o}{=}\PYG{n}{extractNextBatch}\PYG{p}{,} \PYG{n}{args}\PYG{o}{=}\PYG{p}{(}\PYG{n}{batchId}\PYG{p}{,}
+      \PYG{n}{capWord2Ind}\PYG{p}{,} \PYG{n}{captionsDict}\PYG{p}{,} \PYG{n}{cocoHelper}\PYG{p}{,} \PYG{n}{rawCaptions}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{p}{))}
+      \PYG{n}{load\PYGZus{}data\PYGZus{}process}\PYG{o}{.}\PYG{n}{start}\PYG{p}{()}
+    \PYG{n}{prepare\PYGZus{}data\PYGZus{}and\PYGZus{}train\PYGZus{}structure}\PYG{p}{(}\PYG{n}{batchData}\PYG{o}{=}\PYG{n}{batchData}\PYG{p}{,} \PYG{n}{i}\PYG{o}{=}\PYG{n}{i}\PYG{p}{,}
+    \PYG{n}{batchImgFileName}\PYG{o}{=}\PYG{n}{batchImgFileName}\PYG{p}{,} \PYG{n}{cnn}\PYG{o}{=}\PYG{n}{cnn}\PYG{p}{,}
+    \PYG{n}{data\PYGZus{}dir}\PYG{o}{=}\PYG{n}{data\PYGZus{}dir}\PYG{p}{,} \PYG{n}{imageFeaturesSize}\PYG{o}{=}\PYG{n}{imageFeaturesSize}\PYG{p}{,} \PYG{n}{rnn}\PYG{o}{=}\PYG{n}{rnn}\PYG{p}{,}
+    \PYG{n}{rnnOptions}\PYG{o}{=}\PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{batchLabelRaw}\PYG{o}{=}\PYG{n}{batchLabelRaw}\PYG{p}{)}
+    \PYG{n}{load\PYGZus{}data\PYGZus{}process}\PYG{o}{.}\PYG{n}{join}\PYG{p}{()}
+    \PYG{n}{batchId} \PYG{o}{+=} \PYG{l+m+mi}{1}
+    \PYG{n}{endTime} \PYG{o}{=} \PYG{n}{time}\PYG{o}{.}\PYG{n}{time}\PYG{p}{()}
+    \PYG{n}{duration} \PYG{o}{=} \PYG{p}{(}\PYG{n}{endTime} \PYG{o}{\PYGZhy{}} \PYG{n}{startTime}\PYG{p}{)} \PYG{o}{/} \PYG{n}{statShowPeriod}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}batch \PYGZdq{}}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}, train time per batch: \PYGZdq{}}\PYG{p}{,} \PYG{n}{duration}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{n}{current} \PYG{n}{gained} \PYG{n}{cost}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}, costs[i])}
+    \PYG{n}{startTime} \PYG{o}{=} \PYG{n}{endTime}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}drawing error curve...\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{n}{statShowPeriod} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o+ow}{and} \PYG{n}{i} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+      \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{([}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{i}\PYG{p}{],} \PYG{n}{costs}\PYG{p}{[}\PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{i} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{])}
+      \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+      \PYG{n}{plt}\PYG{o}{.}\PYG{n}{pause}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+      \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{n}{checkPoint} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}saving current model...\PYGZdq{}}\PYG{p}{)}
+        \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{saver}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}\PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{session}\PYG{p}{,}
+        \PYG{n}{rnnOptions}\PYG{o}{.}\PYG{n}{saved\PYGZus{}model\PYGZus{}path}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}testing current model:\PYGZdq{}}\PYG{p}{)}
+        \PYG{n}{testModel}\PYG{p}{(}\PYG{n}{rnn}\PYG{p}{,} \PYG{n}{rnnOptions}\PYG{p}{,} \PYG{n}{test\PYGZus{}cocoHelper}\PYG{p}{,}
+        \PYG{n}{test\PYGZus{}capInd2Word}\PYG{p}{,} \PYG{n}{test\PYGZus{}capWord2Ind}\PYG{p}{,} \PYG{n}{test\PYGZus{}captionsDict}\PYG{p}{,}
+        \PYG{n}{test\PYGZus{}rawCaptions}\PYG{p}{,} \PYG{n}{cnn}\PYG{p}{,} \PYG{n}{data\PYGZus{}dir}\PYG{p}{)}
+\end{Verbatim}

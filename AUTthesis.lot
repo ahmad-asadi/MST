@@ -1,0 +1,15 @@
+\hspace *{.5cm}جدول\hfill صفحه \par 
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1‏-‏1}{\ignorespaces خلاصه‌‌ای از سیر پژوهش‌های پیشین در حوزه تولید شرح متناظر تصاویر\relax }}{4}{table.caption.7}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2‏-‏1}{\ignorespaces امتیاز \lr {BLEU} کسب شده توسط مدل نگاشت دوطرفه ارائه شده در مقایسه با مدل‌های دیگر \cite {chen2015mind}.\relax }}{35}{table.caption.38}
+\contentsline {table}{\numberline {2‏-‏2}{\ignorespaces جدول نتایج بازیابی تصاویر با استفاده از جملات ورودی در مدل ارائه شده در \cite {chen2015mind}\relax }}{36}{table.caption.40}
+\contentsline {table}{\numberline {2‏-‏3}{\ignorespaces نتایج اعمال روش \cite {xu2015show} بر روی مجموعه‌داده‌های مختلف در مقایسه با روش‌های مختلف. \cite {xu2015show}\relax }}{46}{table.caption.79}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3‏-‏1}{\ignorespaces مقایسه عمل‌کرد رمزگذار مورد استفاده در پژوهش با مدل‌های دیگر\cite {szegedy2016rethinking}\relax }}{56}{table.caption.89}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4‏-‏1}{\ignorespaces نمونه‌هایی از خروجی‌های صحیح مدل ارائه شده در پژوهش\relax }}{70}{table.caption.112}
+\contentsline {table}{\numberline {4‏-‏2}{\ignorespaces نمونه‌هایی از خروجی‌های غلط مدل ارائه شده در پژوهش\relax }}{71}{table.caption.114}
+\addvspace {10\p@ }
+\contentsfinish 
+\contentsfinish 

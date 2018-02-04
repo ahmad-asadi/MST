@@ -1,0 +1,52 @@
+\BOOKMARK [0][-]{section*.4}{فهرست اشکال}{}% 1
+\BOOKMARK [0][-]{section*.5}{فهرست جداول}{}% 2
+\BOOKMARK [0][-]{chapter.1}{مقدمه}{}% 3
+\BOOKMARK [1][-]{section.1.1}{بیان مساله}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{نگاهی بر سیر پژوهش‌های پیشین}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.3}{نگاهی بر ایده پژوهش}{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.4}{خلاصه فصول بعدی}{chapter.1}% 7
+\BOOKMARK [0][-]{chapter.2}{مروری بر مطالعات گذشته}{}% 8
+\BOOKMARK [1][-]{section.2.1}{مقدمه}{chapter.2}% 9
+\BOOKMARK [1][-]{section.2.2}{پژوهش‌های انجام‌شده در زمینه درک صحنه توسط مغز انسان}{chapter.2}% 10
+\BOOKMARK [1][-]{section.2.3}{روش‌های مبتنی بر مدل‌های گرافی-احتمالی}{chapter.2}% 11
+\BOOKMARK [2][-]{subsection.2.3.1}{استفاده از مدل میدان تصادفی مارکف}{section.2.3}% 12
+\BOOKMARK [2][-]{subsection.2.3.2}{استفاده از مدل میدان تصادفی شرطی}{section.2.3}% 13
+\BOOKMARK [2][-]{subsection.2.3.3}{استفاده از سایر مدل‌های گرافی احتمالی}{section.2.3}% 14
+\BOOKMARK [1][-]{section.2.4}{روش‌های مبتنی بر شبکه‌های عصبی کانولوشنی عمیق}{chapter.2}% 15
+\BOOKMARK [2][-]{subsection.2.4.1}{اختصاص معنا به قطعه‌های مختلف تصویر}{section.2.4}% 16
+\BOOKMARK [2][-]{subsection.2.4.2}{ناحیه‌بندی عمیق تصاویر به منظور نگاشت دوطرفه جملات و تصاویر}{section.2.4}% 17
+\BOOKMARK [2][-]{subsection.2.4.3}{مدل دوطرفه نگاشت تصاویر و جملات مبتنی بر یادگیری عمیق}{section.2.4}% 18
+\BOOKMARK [2][-]{subsection.2.4.4}{مدل زبانی مبتنی بر شبکه عصبی بازگشتی}{section.2.4}% 19
+\BOOKMARK [2][-]{subsection.2.4.5}{مدل دوطرفه نگاشت تصاویر و جملات با استفاده از شبکه عصبی بازگشتی}{section.2.4}% 20
+\BOOKMARK [1][-]{section.2.5}{تولید شرح بر تصاویر با استفاده از روش‌های مبتنی بر توجه بصری}{chapter.2}% 21
+\BOOKMARK [2][-]{subsection.2.5.1}{روش‌های مبتنی بر توجه بصری در حوزه ترجمه ماشینی}{section.2.5}% 22
+\BOOKMARK [2][-]{subsection.2.5.2}{روش‌های مبتنی بر توجه بصری در حوزه تولید شرح متناظر تصویر}{section.2.5}% 23
+\BOOKMARK [2][-]{subsection.2.5.3}{فعالیت‌های مشابه دیگر}{section.2.5}% 24
+\BOOKMARK [1][-]{section.2.6}{جمع‌بندی}{chapter.2}% 25
+\BOOKMARK [0][-]{chapter.3}{روش ارائه شده در پژوهش}{}% 26
+\BOOKMARK [1][-]{section.3.1}{مقدمه}{chapter.3}% 27
+\BOOKMARK [1][-]{section.3.2}{رمزگذار}{chapter.3}% 28
+\BOOKMARK [1][-]{section.3.3}{رمزگشا}{chapter.3}% 29
+\BOOKMARK [2][-]{subsection.3.3.1}{معماری رمزگشا}{section.3.3}% 30
+\BOOKMARK [2][-]{subsection.3.3.2}{جاسازی کلمات}{section.3.3}% 31
+\BOOKMARK [1][-]{section.3.4}{نحوه آموزش و تست شبکه}{chapter.3}% 32
+\BOOKMARK [1][-]{section.3.5}{جمع‌بندی}{chapter.3}% 33
+\BOOKMARK [0][-]{chapter.4}{پیاده‌سازی، آزمون و ارزیابی}{}% 34
+\BOOKMARK [1][-]{section.4.1}{مقدمه}{chapter.4}% 35
+\BOOKMARK [1][-]{section.4.2}{پیاده‌سازی}{chapter.4}% 36
+\BOOKMARK [2][-]{subsection.4.2.1}{چارچوب کاری تنسورفلو}{section.4.2}% 37
+\BOOKMARK [1][-]{section.4.3}{معیار BLEU papineni2002bleu}{chapter.4}% 38
+\BOOKMARK [1][-]{section.4.4}{معیار METEORlavie2007meteor}{chapter.4}% 39
+\BOOKMARK [1][-]{section.4.5}{معیار ROUGE-Llin2004rouge}{chapter.4}% 40
+\BOOKMARK [1][-]{section.4.6}{معیار CIDErvedantam2015cider}{chapter.4}% 41
+\BOOKMARK [1][-]{section.4.7}{آزمایشات}{chapter.4}% 42
+\BOOKMARK [2][-]{subsection.4.7.1}{معرفی مجموعه‌داده}{section.4.7}% 43
+\BOOKMARK [2][-]{subsection.4.7.2}{نمونه‌هایی از خروجی‌ها}{section.4.7}% 44
+\BOOKMARK [2][-]{subsection.4.7.3}{مقایسه با روش‌های مشابه}{section.4.7}% 45
+\BOOKMARK [1][-]{section.4.8}{بحث درباره نتایج و عملکرد شبکه}{chapter.4}% 46
+\BOOKMARK [1][-]{section.4.9}{جمع‌بندی}{chapter.4}% 47
+\BOOKMARK [0][-]{chapter.5}{جمع‌بندي، نتيجه‌گيري و پیشنهادات}{}% 48
+\BOOKMARK [0][-]{appendix*.117}{منابع و مراجع}{}% 49
+\BOOKMARK [0][-]{appendix*.118}{پیوست}{}% 50
+\BOOKMARK [0][-]{appendix*.125}{واژه‌نامه‌ی فارسی به انگلیسی}{}% 51
+\BOOKMARK [0][-]{appendix*.126}{واژه‌نامه‌ی انگلیسی به فارسی}{}% 52

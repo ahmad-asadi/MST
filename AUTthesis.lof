@@ -1,0 +1,47 @@
+\hspace *{.5cm}شکل\hfill صفحه \par 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1‏-‏1}{\ignorespaces نمونه‌ای از تصاویر ورودی و خروجی‌های مورد انتظار\relax }}{3}{figure.caption.6}
+\contentsline {figure}{\numberline {1‏-‏2}{\ignorespaces طرح‌واره‌ای از بستر کاری رمزگذار-رمزگشا\relax }}{8}{figure.caption.8}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2‏-‏1}{\ignorespaces نمونه توصیف‌های افراد برای تصاویر}}{12}{figure.caption.9}
+\contentsline {figure}{\numberline {2‏-‏2}{\ignorespaces ساختار مطلوب اطلاعات استخراج‌شده از تصاویر\cite {fei2007we}\relax }}{13}{figure.caption.10}
+\contentsline {figure}{\numberline {2‏-‏3}{\ignorespaces تصاویر دنیای واقعی مورد استفاده در آزمایشات\cite {fei2007we}\relax }}{14}{figure.caption.11}
+\contentsline {figure}{\numberline {2‏-‏4}{\ignorespaces نمودار مقایسه‌ای عملکرد مغز در درک صحنه}}{15}{figure.caption.13}
+\contentsline {figure}{\numberline {2‏-‏5}{\ignorespaces نمونه‌ای از نتایج به‌دست‌آمده از آزمایشات\cite {fei2007we}\relax }}{16}{figure.caption.14}
+\contentsline {figure}{\numberline {2‏-‏6}{\ignorespaces نگاشت تصویر به فضای معنایی}}{17}{figure.caption.15}
+\contentsline {figure}{\numberline {2‏-‏7}{\ignorespaces مدل میدان تصادفی مارکف در درک صحنه}}{18}{figure.caption.16}
+\contentsline {figure}{\numberline {2‏-‏8}{\ignorespaces مدل سلسله‌مراتبی میدان تصادفی شرطی در درک صحنه}}{19}{figure.caption.17}
+\contentsline {figure}{\numberline {2‏-‏9}{\ignorespaces مدل گرافی احتمالی مورد استفاده در پژوهش\cite {li2007and}}}{21}{figure.caption.18}
+\contentsline {figure}{\numberline {2‏-‏10}{\ignorespaces نمونه تصاویر موجود در مجموعه‌داده مورد استفاده \cite {li2007and}\relax }}{25}{figure.caption.19}
+\contentsline {figure}{\numberline {2‏-‏11}{\ignorespaces ماتریس درهم‌ریختگی مدل کامل ارائه شده در \cite {li2007and}}}{26}{figure.caption.20}
+\contentsline {figure}{\numberline {2‏-‏12}{\ignorespaces نتیجه مقایسه مدل‌های مختلف در \cite {li2007and}}}{26}{figure.caption.21}
+\contentsline {figure}{\numberline {2‏-‏13}{\ignorespaces نتایج نهایی به‌دست آمده از مدل بر روی تصاویر. \cite {li2007and}\relax }}{27}{figure.caption.22}
+\contentsline {figure}{\numberline {2‏-‏14}{\ignorespaces طرح‌واره عملکرد روش \lr {RCNN}}}{29}{figure.caption.23}
+\contentsline {figure}{\numberline {2‏-‏15}{\ignorespaces نتایج عملکرد اهداف تعریف‌شده در روش \lr {RCNN} برای هم‌ترازسازی تصاویر و جملات}}{31}{figure.caption.24}
+\contentsline {figure}{\numberline {2‏-‏16}{\ignorespaces نتایج نهایی روش \lr {RCNN}}}{32}{figure.caption.25}
+\contentsline {figure}{\numberline {2‏-‏17}{\ignorespaces نتایج حاصل از جستجوی جملات در روش \lr {RCNN}}}{33}{figure.caption.26}
+\contentsline {figure}{\numberline {2‏-‏18}{\ignorespaces ساختار کلی شبکه ارائه شده برای نگاشت دوطرفه تصاویر و جملات در پژوهش \cite {chen2015mind}\relax }}{35}{figure.caption.37}
+\contentsline {figure}{\numberline {2‏-‏19}{\ignorespaces نمونه‌ای از جملات تولید شده برای تصاویر توسط مدل پیشنهاد شده در \cite {chen2015mind}\relax }}{36}{figure.caption.39}
+\contentsline {figure}{\numberline {2‏-‏20}{\ignorespaces ساختار کلی چارچوب کاری رمزگذار-رمزگشا\relax }}{38}{figure.caption.41}
+\contentsline {figure}{\numberline {2‏-‏21}{\ignorespaces ساختار رمزگشا مورد استفاده در چارچوب کاری \cite {bahdanau2014neural}\relax }}{39}{figure.caption.46}
+\contentsline {figure}{\numberline {2‏-‏22}{\ignorespaces ساختار کلی یک شبکه عصبی بازگشتی دوطرفه\relax }}{41}{figure.caption.56}
+\contentsline {figure}{\numberline {2‏-‏23}{\ignorespaces یک واحد از شبکه حافظه کوتاه‌مدت بلند مورد استفاده در رمزگشا پژوهش \cite {xu2015show}\relax }}{43}{figure.caption.58}
+\contentsline {figure}{\numberline {2‏-‏24}{\ignorespaces نحوه عمل‌کرد الگوریتم در تغییر توجه بصری بصری و کلمه تولید شده در هر نقطه. \cite {xu2015show}\relax }}{47}{figure.caption.80}
+\contentsline {figure}{\numberline {2‏-‏25}{\ignorespaces چند نمونه از تصاویر که در آن‌ها توجه بصری روی یک جسم منجر به تولید کلمه دقیق متناظر شده است\cite {xu2015show}. \relax }}{47}{figure.caption.81}
+\contentsline {figure}{\numberline {2‏-‏26}{\ignorespaces نمونه‌هایی از تولید کلمات نامناسب مطابق با نقاط توجه استفاده شده در مدل‌\cite {xu2015show}\relax }}{48}{figure.caption.82}
+\contentsline {figure}{\numberline {2‏-‏27}{\ignorespaces فرایند تولید شرح متناظر تصویر با استفاده از توجه بصری سخت \cite {xu2015show}\relax }}{49}{figure.caption.83}
+\contentsline {figure}{\numberline {2‏-‏28}{\ignorespaces فرایند تولید شرح متناظر تصویر با استفاده از توجه بصری نرم \cite {xu2015show}\relax }}{50}{figure.caption.84}
+\contentsline {figure}{\numberline {2‏-‏29}{\ignorespaces ساختار پشته‌ای ارائه شده در \cite {luong2015effective}\relax }}{51}{figure.caption.85}
+\contentsline {figure}{\numberline {2‏-‏30}{\ignorespaces ساختار چارچوب کاری ارائه شده در \cite {cho2015describing} در حوزه تولید شرح متناظر تصویر\relax }}{52}{figure.caption.86}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3‏-‏1}{\ignorespaces شبکه عصبی کوچک جایگزین فیلتر $5*5$}}{55}{figure.caption.87}
+\contentsline {figure}{\numberline {3‏-‏2}{\ignorespaces ساختار کلی رمزگذار مورد استفاده در پژوهش}}{56}{figure.caption.88}
+\contentsline {figure}{\numberline {3‏-‏3}{\ignorespaces نمایی از یک سلول شبکه \lr { LSTM}\relax }}{58}{figure.caption.102}
+\contentsline {figure}{\numberline {3‏-‏4}{\ignorespaces طرح‌واره‌ای از ساختار \lr { LSTM}پشته‌ای\relax }}{59}{figure.caption.103}
+\contentsline {figure}{\numberline {3‏-‏5}{\ignorespaces طرح‌واره‌ای از مدل \lr {Skip-Gram}}}{60}{figure.caption.105}
+\contentsline {figure}{\numberline {3‏-‏6}{\ignorespaces معماری ارائه شده در پژوهش حاضر\relax }}{62}{figure.caption.108}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4‏-‏1}{\ignorespaces یک نمونه از گراف‌های محاسباتی در چارچوب کاری تنسورفلو\relax }}{67}{figure.caption.110}
+\addvspace {10\p@ }
+\contentsfinish 
+\contentsfinish 
